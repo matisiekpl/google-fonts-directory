@@ -91,4 +91,5 @@ func main() {
 	if err != nil {
 		logrus.Error(err)
 	}
+	logrus.Infof("Written %d fonts, see fonts.json", len(fonts))
 }
