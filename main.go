@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/schollz/progressbar/v3"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/proto"
 	"io"
@@ -41,7 +40,6 @@ func downloadFont(family *FontFamily, font *Font) {
 		Italic:   1.0-*font.Italic.Start < 1e-6,
 		Filename: filename,
 	})
-	_ = bar.Add(1)
 	logrus.Infof("Downloaded %s", filename)
 }
 
@@ -54,8 +52,6 @@ func hashToString(bytes []byte) string {
 	}
 	return fileName
 }
-
-var bar *progressbar.ProgressBar
 
 type FontFile struct {
 	Family   string
@@ -82,11 +78,6 @@ func main() {
 	if err != nil {
 		logrus.Panic(err)
 	}
-	size := 0
-	for _, family := range directory.Family {
-		size = size + len(family.Fonts)
-	}
-	bar = progressbar.Default(int64(size))
 	for _, family := range directory.Family {
 		for _, font := range family.Fonts {
 			downloadFont(family, font)
